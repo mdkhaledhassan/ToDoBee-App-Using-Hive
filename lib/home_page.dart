@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,9 +16,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Box? myBox;
+  Box? myBox1;
   @override
   void initState() {
     myBox = Hive.box('myBox');
+    myBox1 = Hive.box('myBox1');
     super.initState();
   }
 
@@ -97,8 +100,11 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         setState(() {
                           var todo = todolist.text;
+                          var date =
+                              DateFormat.E().add_jm().format(DateTime.now());
                           if (todo.isNotEmpty) {
                             myBox!.add(todo);
+                            myBox1!.add(date);
                             todolist.clear();
                             Navigator.of(context).pop();
                           } else {}
@@ -205,6 +211,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {
                             setState(() {
                               myBox!.deleteAt(index);
+                              myBox1!.deleteAt(index);
                               Navigator.of(context).pop();
                             });
                           },
@@ -285,96 +292,219 @@ class _HomePageState extends State<HomePage> {
                               itemCount: myBox!.keys.toList().length,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(bottom: 15),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 5, right: 5, top: 5, bottom: 5),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        update_todolist.text =
-                                            myBox!.getAt(index).toString();
-                                        update_todo(index);
-                                      },
-                                      child: Container(
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.grey,
-                                                    offset: Offset(0.0, 1.0),
-                                                    blurRadius: 2.0)
-                                              ],
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(20),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  flex: 8,
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        height: 10,
-                                                        width: 10,
-                                                        decoration: BoxDecoration(
-                                                            color: Colors
-                                                                    .primaries[
-                                                                Random().nextInt(
-                                                                    Colors
-                                                                        .primaries
-                                                                        .length)],
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20)),
+                                  padding: const EdgeInsets.only(
+                                      left: 5, right: 5, top: 5, bottom: 10),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      update_todolist.text =
+                                          myBox!.getAt(index).toString();
+                                      update_todo(index);
+                                    },
+                                    child: Container(
+                                        height: 70,
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey,
+                                                  offset: Offset(0.0, 1.0),
+                                                  blurRadius: 2.0)
+                                            ],
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                flex: 12,
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      height: 10,
+                                                      width: 10,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors
+                                                                  .primaries[
+                                                              Random().nextInt(
+                                                                  Colors
+                                                                      .primaries
+                                                                      .length)],
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20)),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Expanded(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          RichText(
+                                                              text: TextSpan(
+                                                            text: myBox!
+                                                                .getAt(index)
+                                                                .toString(),
+                                                            style: GoogleFonts.roboto(
+                                                                color: Color(
+                                                                    0xff707070),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                fontSize: 14),
+                                                          )),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(
+                                                            myBox1!
+                                                                .getAt(index)
+                                                                .toString(),
+                                                            style: GoogleFonts.roboto(
+                                                                color: Color(
+                                                                        0xff707070)
+                                                                    .withOpacity(
+                                                                        0.6),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                fontSize: 8),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            softWrap: false,
+                                                          ),
+                                                        ],
                                                       ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Flexible(
-                                                        child: Text(
-                                                          myBox!
-                                                              .getAt(index)
-                                                              .toString(),
-                                                          style: GoogleFonts.roboto(
-                                                              color: Color(
-                                                                  0xff707070),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              fontSize: 14),
-                                                          maxLines: 1,
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                          softWrap: false,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                Expanded(
-                                                    flex: 1,
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        setState(() {
-                                                          delete_todo(index);
-                                                        });
-                                                      },
-                                                      child: Icon(
-                                                        Icons.close,
-                                                        color: Colors.red,
-                                                        size: 20,
-                                                      ),
-                                                    ))
-                                              ],
-                                            ),
-                                          )),
-                                    ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Expanded(
+                                                  flex: 1,
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      setState(() {
+                                                        delete_todo(index);
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                                      size: 20,
+                                                    ),
+                                                  )),
+
+                                              // Row(
+                                              //   children: [
+                                              //     Container(
+                                              //       height: 10,
+                                              //       width: 10,
+                                              //       decoration: BoxDecoration(
+                                              //           color: Colors.primaries[
+                                              //               Random().nextInt(
+                                              //                   Colors.primaries
+                                              //                       .length)],
+                                              //           borderRadius:
+                                              //               BorderRadius
+                                              //                   .circular(20)),
+                                              //     ),
+                                              //     SizedBox(
+                                              //       width: 10,
+                                              //     ),
+                                              //     Container(
+                                              //       child: Column(
+                                              //         mainAxisAlignment:
+                                              //             MainAxisAlignment
+                                              //                 .center,
+                                              //         crossAxisAlignment:
+                                              //             CrossAxisAlignment
+                                              //                 .start,
+                                              //         children: [
+                                              //           RichText(
+                                              //               text: TextSpan(
+                                              //             text: myBox!
+                                              //                 .getAt(index)
+                                              //                 .toString(),
+                                              //             style: GoogleFonts.roboto(
+                                              //                 color: Color(
+                                              //                     0xff707070),
+                                              //                 fontWeight:
+                                              //                     FontWeight
+                                              //                         .normal,
+                                              //                 fontSize: 14),
+                                              //           )),
+                                              //           // Text(
+                                              //           //   myBox!
+                                              //           //       .getAt(index)
+                                              //           //       .toString(),
+                                              //           //   style: GoogleFonts.roboto(
+                                              //           //       color: Color(
+                                              //           //           0xff707070),
+                                              //           //       fontWeight:
+                                              //           //           FontWeight
+                                              //           //               .normal,
+                                              //           //       fontSize: 14),
+                                              //           //   maxLines: 1,
+                                              //           //   overflow:
+                                              //           //       TextOverflow.fade,
+                                              //           //   softWrap: false,
+                                              //           // ),
+                                              //           SizedBox(
+                                              //             height: 5,
+                                              //           ),
+                                              //           Text(
+                                              //             myBox1!
+                                              //                 .getAt(index)
+                                              //                 .toString(),
+                                              //             style: GoogleFonts.roboto(
+                                              //                 color: Color(
+                                              //                         0xff707070)
+                                              //                     .withOpacity(
+                                              //                         0.6),
+                                              //                 fontWeight:
+                                              //                     FontWeight
+                                              //                         .normal,
+                                              //                 fontSize: 8),
+                                              //             maxLines: 1,
+                                              //             overflow:
+                                              //                 TextOverflow
+                                              //                     .fade,
+                                              //             softWrap: false,
+                                              //           ),
+                                              //         ],
+                                              //       ),
+                                              //     ),
+                                              //   ],
+                                              // ),
+                                              // InkWell(
+                                              //   onTap: () async {
+                                              //     setState(() {
+                                              //       delete_todo(index);
+                                              //     });
+                                              //   },
+                                              //   child: Icon(
+                                              //     Icons.close,
+                                              //     color: Colors.red,
+                                              //     size: 20,
+                                              //   ),
+                                              // )
+                                            ],
+                                          ),
+                                        )),
                                   ),
                                 );
                               },
