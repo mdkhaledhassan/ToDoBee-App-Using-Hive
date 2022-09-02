@@ -153,6 +153,79 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  delete_todo(index) {
+    return showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            elevation: 10,
+            backgroundColor: Colors.white,
+            content: Container(
+              height: 80,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Are you sure?',
+                    style: GoogleFonts.roboto(
+                        color: Color(0xff707070),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 23),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 30,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black)),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.roboto(
+                                color: Color(0xff000000),
+                                fontWeight: FontWeight.normal,
+                                fontSize: 12),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            border: Border.all(color: Colors.black)),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              myBox!.deleteAt(index);
+                              Navigator.of(context).pop();
+                            });
+                          },
+                          child: Text(
+                            'Ok',
+                            style: GoogleFonts.roboto(
+                                color: Color(0xff000000),
+                                fontWeight: FontWeight.normal,
+                                fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
   TextEditingController todolist = TextEditingController();
   TextEditingController update_todolist = TextEditingController();
   @override
@@ -289,8 +362,7 @@ class _HomePageState extends State<HomePage> {
                                                     child: InkWell(
                                                       onTap: () async {
                                                         setState(() {
-                                                          myBox!
-                                                              .deleteAt(index);
+                                                          delete_todo(index);
                                                         });
                                                       },
                                                       child: Icon(
